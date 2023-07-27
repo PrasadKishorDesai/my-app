@@ -12,7 +12,6 @@ const getStudents = async (req, res) => {
             path: "api/students",
             studs: result,
             newDataAdded: false,
-            isAuthenticated: req.session.isLoggedIn
         })
     } catch (error) {
         res.status(500).render('500', {
@@ -28,7 +27,6 @@ const getAddStudent = async (req, res) => {
         res.status(200).render('add-student', {
             pageTitle: "Add Student Page",
             path: "auth/students",
-            isAuthenticated: req.session.isLoggedIn
         })
     } catch (error) {
         res.status(500).render('500', {
@@ -42,7 +40,7 @@ const getAddStudent = async (req, res) => {
 const postAddStudent = async (req, res) => {
     try {
         let values = req.body;
-        let sqlQuery = "INSERT INTO students SET ?";
+        let sqlQuery = 'INSERT INTO students SET ?';
         let result = await query(sqlQuery, [values]);
 
         // const sqlQueryFetch = "SELECT * FROM students WHERE Id = ?";
@@ -69,7 +67,6 @@ const postAddStudent = async (req, res) => {
         res.status(500).render('500', {
             pageTitle: "Internal Server Error!!!",
             data: error.message,
-            // isAuthenticated: req.session.isLoggedIn
         });
     }
 }
@@ -89,13 +86,11 @@ const getEditStudent = async (req, res) => {
             pageTitle: "Add Student Page",
             path: "auth/edit-student",
             studData: resultFetch[0],
-            isAuthenticated: req.session.isLoggedIn
         })
     } catch (error) {
         res.status(500).render('500', {
             pageTitle: "Internal Server Error!!!",
             data: error.message,
-            // isAuthenticated: req.session.isLoggedIn
         });
     }
 }
@@ -127,7 +122,6 @@ const getDeleteStudent = async (req, res) => {
         pageTitle: "Confirm Delete",
         path: "auth/delete-student",
         studData: resultFetch[0],
-        isAuthenticated: req.session.isLoggedIn,
         id: id
     })
 }
@@ -136,7 +130,7 @@ const postDeleteStudent = async (req, res) => {
     try {
         const id = req.params.id;
         const val = req.body.submit;
-        console.log(val);
+        // console.log(val);
         if (val != 'yes') {
             res.redirect('/');
             return;

@@ -38,8 +38,8 @@
                 <a class="navbar-brand" href="/auth/signup">
                     <form action="/auth/logout" method="post" style="text-decoration: none;">
                         <!-- <a class="navbar-brand" href="/auth/logout">Logout</a>  -->
+                        <!-- <input type="hidden" name="_csrf" value="<%= //csrfToken %>"> -->
                         <button type="submit" style="all: unset;">Logout</button>
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     </form>
                 </a>
             <% } %>
