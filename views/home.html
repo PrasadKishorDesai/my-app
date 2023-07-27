@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="/css/bootstrap.min.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+    <div>
+        <div>
+            <nav class="navbar navbar-expand-lg bg-info navbar-dark navbar navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">Home</a>
+                    <a class="navbar-brand" href="/">Login</a>
+                    <a class="navbar-brand" href="/">Signup</a>
+                </div>
+            </nav>
+        </div>
+        <div class='my-3 m-5'>
+            <table class="table table-striped border ">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">DOB</th>
+                        <th scope="col">Blood Group</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Phone No.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>
+                            <a href="/editstudent" class='m-2'><img src="/img/edit-img.png" alt="edit symbol" /></a>
+                            <a href="/deletestudent"><img src="/img/delete-img.png" alt="edit symbol" /></a>
+                        </td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>temp</td>
+                        <td>temp</td>
+                        <td>@temp</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class='d-flex justify-content-between'>
+                <a exact="true" href="/addstudent" class="btn btn-dark">Add Student</a>
+                <a exact="true" href="/editstudent" class="btn btn-dark">Edit Student</a>
+                <a exact="true" href="/deletestudent" class="btn btn-dark">Delete Student</a>
+                <a exact="true" href="/" class="btn btn-dark">GetStudData</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+
+</html>

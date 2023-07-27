@@ -1,0 +1,76 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/home.css">
+    </head>
+
+    <body>
+        <div>
+            <%- include('./includes/nav.ejs') %>
+                <div class='my-3 m-5'>
+                    <% if (newDataAdded) { %>
+                        <div class="alert alert-success" role="alert">
+                            Data Added successfully!!!
+                        </div>
+                    <% } %>
+                            <% if (studs.length> 0) { %>
+                                <table class="table table-striped border ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Action</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">DOB</th>
+                                            <th scope="col">Blood Group</th>
+                                            <th scope="col">Gender</th>
+                                            <th scope="col">Phone No.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% studs.forEach(student=> { %>
+                                            <tr>
+                                                <th scope="row">
+                                                    <%= student.id %>
+                                                </th>
+                                                <td class="buttons">
+                                                    <a href="/admin/edit-student/<%= student.id %>" class='m-2'><img src="/img/edit-img.png" alt="edit symbol" /></a>
+                                                    <a href="/admin/deletestudent"><img src="/img/delete-img.png" alt="edit symbol" /></a>
+                                                    <!-- <form action="/admin/delete-student" method="post">
+                                                        <button type="submit"><a href="/admin/deletestudent"><img src="/img/delete-img.png" alt="edit symbol" /></a></button>
+                                                    </form> -->
+                                                </td>
+                                                <td>
+                                                    <%= student.f_name %>
+                                                </td>
+                                                <td>
+                                                    <%= student.l_name %>
+                                                </td>
+                                                <td>
+                                                    <%= student.dob.getDate() + '/' + (student.dob.getMonth()+1) + '/' +
+                                                        student.dob.getFullYear() %>
+                                                </td>
+                                                <td>
+                                                    <%= student.bloodgrp %>
+                                                </td>
+                                                <td>
+                                                    <%= student.gender %>
+                                                </td>
+                                                <td>
+                                                    <%= student.phoneno %>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+
+                                <!-- <div class='d-flex justify-content-between'>
+                            <a exact="true" href="/addstudent" class="btn btn-dark">Add Student</a>
+                            <a exact="true" href="/editstudent" class="btn btn-dark">Edit Student</a>
+                            <a exact="true" href="/deletestudent" class="btn btn-dark">Delete Student</a>
+                            <a exact="true" href="/" class="btn btn-dark">GetStudData</a>
+                        </div> -->
+                                <% } else {%>
+                                    <h3 style="text-align: center;">No data!!!</h3>
+                                    <% } %>
+                </div>
+        </div>
+        <%- include('./includes/end.ejs') %>
