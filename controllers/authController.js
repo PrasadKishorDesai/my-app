@@ -2,6 +2,7 @@ const { log } = require('console');
 const db = require('../database/mysql');
 const util = require('util');
 const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
 const query = util.promisify(db.query).bind(db);
 
 
@@ -9,7 +10,11 @@ exports.getLogin = async (req, res) => {
     res.status(200).render('login', {
         pageTitle: "Login Page",
         path: '/login',
-        isAuthenticated: false
+        isAuthenticated: false,
+        oldInput: {
+            email: '',
+            password: ''
+        }
     })
 }
 
@@ -18,6 +23,19 @@ exports.postLogin = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // 422 for validation failed
+            console.log(errors.array()[0]);
+            res.status(422).render('login', {
+                pageTitle: "Login Page",
+                path: "/auth/login",
+                oldInput: {email, password}
+            });
+            return;
+        }
+
         // console.log(email);
         let sqlQueryFetch = "SELECT * FROM admin WHERE email = ?";
         let resultFetch = await query(sqlQueryFetch, [email]);
@@ -26,7 +44,12 @@ exports.postLogin = async (req, res) => {
         // console.log(resultFetch.length);
         if (resultFetch.length === 0) {
             // console.log("user does not exist");
-            res.redirect('/auth/signup');
+            // res.redirect('/auth/login');
+            res.status(422).render('login', {
+                pageTitle: "Login Page",
+                path: "/auth/login",
+                oldInput: {email, password}
+            });
             return;
         }
 
@@ -38,7 +61,11 @@ exports.postLogin = async (req, res) => {
         // console.log(isEqual)
         if (!isEqual) {
             // console.log("password does not match");
-            res.redirect('/api/login');
+            res.status(422).render('login', {
+                pageTitle: "Login Page",
+                path: "/auth/login",
+                oldInput: {email, password}
+            });
             return;
         }
 
@@ -52,7 +79,7 @@ exports.postLogin = async (req, res) => {
         //     res.redirect('/');
         // });
         await req.session.save();
-        
+
         // console.log("temp: ", temp);
         res.redirect('/');
 
@@ -68,14 +95,34 @@ exports.postLogin = async (req, res) => {
 exports.getSignup = async (req, res) => {
     res.status(200).render('signup', {
         pageTitle: "Signup Page",
-        path: '/signup',
-        isAuthenticated: false
+        path: '/auth/signup',
+        oldInput: {
+            name: '', 
+            email: '',
+            password: '',
+            confirmPassword: ''
+        }
     })
 }
 
 exports.postSignup = async (req, res) => {
     try {
         const email = req.body.email;
+        let name = req.body.name;
+        let password = req.body.password;
+        let confirmPassword = req.body.confirmPassword;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // 422 for validation failed
+            console.log(errors.array()[0]);
+            res.status(422).render('signup', {
+                pageTitle: "Signup Page",
+                path: "/auth/signup",
+                oldInput: {name, email, password, confirmPassword}
+            });
+            return;
+        }
 
         const sqlQueryFetch = "SELECT * FROM admin WHERE email = ?";
         let resultFetch = await query(sqlQueryFetch, [email]);
@@ -88,9 +135,6 @@ exports.postSignup = async (req, res) => {
             return;
         }
 
-        let name = req.body.name;
-        let password = req.body.password;
-        let confirmPassword = req.body.confirmPassword;
         if (password !== confirmPassword) {
             // console.log("password doesn't match");
             res.redirect('/auth/signup');

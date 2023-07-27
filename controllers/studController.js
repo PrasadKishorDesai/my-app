@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const db = require('../database/mysql');
 const util = require('util');
 const query = util.promisify(db.query).bind(db);
@@ -40,6 +41,19 @@ const getAddStudent = async (req, res) => {
 const postAddStudent = async (req, res) => {
     try {
         let values = req.body;
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // 422 for validation failed
+            console.log(errors.array()[0]);
+            res.status(422).render('add-student', {
+                pageTitle: "Add Student Page",
+                path: "/admin/add-student",
+                // oldInput: {}
+            });
+            return;
+        }
+
         let sqlQuery = 'INSERT INTO students SET ?';
         let result = await query(sqlQuery, [values]);
 
