@@ -55,7 +55,7 @@ const postAddStudent = async (req, res) => {
         // })
 
 
-        res.redirect('/api/students');
+        res.redirect('/');
 
         // sqlQuery = "SELECT * FROM students";
         // result = await query(sqlQuery);
@@ -108,13 +108,59 @@ const postEditStudent = async (req, res) => {
         const sqlQuery = "UPDATE students SET ? WHERE id = ?";
         let result = await query(sqlQuery, [values, id]);
 
-        res.redirect('/api/students');
+        res.redirect('/');
 
     } catch (error) {
         res.status(500).render('500', {
             pageTitle: "Internal Server Error!!!",
             data: error.message,
-            // isAuthenticated: req.session.isLoggedIn
+        });
+    }
+}
+
+const getDeleteStudent = async (req, res) => {
+    const id = req.params.id;
+    const sqlQueryFetch = "SELECT * FROM students WHERE id = ?";
+    let resultFetch = await query(sqlQueryFetch, [id]);
+
+    res.status(200).render('confirm-delete', {
+        pageTitle: "Confirm Delete",
+        path: "auth/delete-student",
+        studData: resultFetch[0],
+        isAuthenticated: req.session.isLoggedIn,
+        id: id
+    })
+}
+
+const postDeleteStudent = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const val = req.body.submit;
+        console.log(val);
+        if (val != 'yes') {
+            res.redirect('/');
+            return;
+        }
+        const sqlQueryFetch = "SELECT * FROM students WHERE id = ?";
+        let resultFetch = await query(sqlQueryFetch, [id]);
+
+        if (resultFetch.length === 0) {
+            throw Error("No data found with given id");
+        }
+
+
+        const sqlQuery = "DELETE FROM students WHERE id = ?";
+        let result = await query(sqlQuery, [id]);
+
+        // console.log("Data deleted successfully with id:", id);
+        res.redirect('/');
+
+
+
+    } catch (error) {
+        res.status(500).render('500', {
+            pageTitle: "Internal Server Error!!!",
+            data: error.message,
         });
     }
 }
@@ -125,5 +171,7 @@ module.exports = {
     postAddStudent,
     getStudents,
     getEditStudent,
-    postEditStudent
+    postEditStudent,
+    getDeleteStudent,
+    postDeleteStudent
 }

@@ -11,6 +11,8 @@ const authRoutes = require('./routes/authRoutes');
 
 const errorControlller = require('./controllers/error');
 
+const csrf = require('csurf');
+
 const app = express();
 
 app.use(express.json());
@@ -18,6 +20,8 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')))
+
+const csrfProtection = csrf();
 
 app.use(
     session({
@@ -27,8 +31,16 @@ app.use(
     })
 );
 
+app.use(csrfProtection);
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
 
 
 app.get("/message", (req, res) => {
@@ -40,6 +52,7 @@ app.get("/message", (req, res) => {
 app.use('/api', studentRoutes);   // home page
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoute);
+app.use(studentRoutes)
 
 app.use('*', errorControlller.get404);
 

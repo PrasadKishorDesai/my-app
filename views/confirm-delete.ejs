@@ -1,0 +1,19 @@
+
+<%- include('./includes/head.ejs')  %>
+</head>
+<body>
+    <% var x = studData.id %>
+    <% //console.log(x) %>
+    <form action="/admin/delete-student/<%= studData.id %>" method="post" class='my-3 container card w-50 p-3 h-50 d-flex justify-content-center'>
+        <div class="container">
+            <h4 class='my-3' style="text-align: center">Are you sure want to delete student with ID: <%= studData.id %></h4>
+            <div class="d-flex justify-content-center">
+                <button type="submit" name="submit" value="yes" class="btn btn-primary mx-2">Yes</button>
+                <button type="submit" name="submit" value="no" class="btn btn-primary">No</button>
+            </div>
+        </div>
+        
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    </form>
+    
+<%- include('./includes/end.ejs') %>

@@ -16,7 +16,10 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
+
+                                            <% if (isAuthenticated) { %>
                                             <th scope="col">Action</th>
+                                            <% } %>
                                             <th scope="col">First</th>
                                             <th scope="col">Last</th>
                                             <th scope="col">DOB</th>
@@ -31,13 +34,17 @@
                                                 <th scope="row">
                                                     <%= student.id %>
                                                 </th>
+                                                
+                                                <% if (isAuthenticated) { %>
                                                 <td class="buttons">
                                                     <a href="/admin/edit-student/<%= student.id %>" class='m-2'><img src="/img/edit-img.png" alt="edit symbol" /></a>
-                                                    <a href="/admin/deletestudent"><img src="/img/delete-img.png" alt="edit symbol" /></a>
-                                                    <!-- <form action="/admin/delete-student" method="post">
-                                                        <button type="submit"><a href="/admin/deletestudent"><img src="/img/delete-img.png" alt="edit symbol" /></a></button>
+                                                    <a href="/admin/delete-student/<%= student.id %>"><img src="/img/delete-img.png" alt="edit symbol" /></a>
+                                                    <!-- <form action="/admin/delete-student/<%= //student.id %>" method="get">
+                                                        <button type="submit"><img src="/img/delete-img.png" alt="delete symbol" /></button>
                                                     </form> -->
                                                 </td>
+                                                <% } %>
+
                                                 <td>
                                                     <%= student.f_name %>
                                                 </td>

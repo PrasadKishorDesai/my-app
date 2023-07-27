@@ -5,6 +5,9 @@ const studController = require('../controllers/studController');
 const router = express.Router();
 
 // home page
-router.get('/students', studController.getStudents);
+router.get('/', studController.getStudents);
+
+
+// router.get('/', studController.getStudents);
 
 module.exports = router;

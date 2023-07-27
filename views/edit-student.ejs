@@ -79,6 +79,8 @@
                         <input type="tel" name="phoneno" pattern="[0-9]{10}" class="form-control" id="phoneno" placeholder="12345-67890" value="<%= studData.phoneno %>"  required />
                     </div>
                 </div>
+                
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
                 <div class='d-flex justify-content-center my-3'>
                     <button type="submit" class="btn btn-primary">Submit</button>

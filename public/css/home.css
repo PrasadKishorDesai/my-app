@@ -8,5 +8,9 @@ td img:hover {
 
 td button, form {
     all: unset;
+    text-decoration: none;
     /* display: inline;  */
+}
+form button {
+    all: unset;
 }

@@ -25,7 +25,7 @@ exports.postLogin = async (req, res) => {
         // console.log(resultFetch[0]);
         // console.log(resultFetch.length);
         if (resultFetch.length === 0) {
-            console.log("user does not exist");
+            // console.log("user does not exist");
             res.redirect('/auth/signup');
             return;
         }
@@ -37,25 +37,24 @@ exports.postLogin = async (req, res) => {
         let isEqual = await bcrypt.compare(password, hashedPwd);
         // console.log(isEqual)
         if (!isEqual) {
-            console.log("password does not match");
-            res.redirect('/auth/login');
+            // console.log("password does not match");
+            res.redirect('/api/login');
             return;
         }
 
-        console.log("successfully logged in");
+        // console.log("successfully logged in");
 
         req.session.isLoggedIn = true;
         // req.session.user = user;
-        let temp = await req.session.save((err) => {
-            console.log("error auth controller 50:", err);
-            res.redirect('/auth/login');
-            // return;
-        });
-
-        console.log("temp: ", temp);
-
-        res.redirect('/api/students');
-
+        // let temp = await req.session.save((err) => {
+        //     console.log("error auth controller 50:", err);
+        //     if (err) return;
+        //     res.redirect('/');
+        // });
+        await req.session.save();
+        
+        // console.log("temp: ", temp);
+        res.redirect('/');
 
     } catch (error) {
         res.status(500).render('500', {
@@ -84,7 +83,7 @@ exports.postSignup = async (req, res) => {
         // console.log(resultFetch[0]);
         // console.log(resultFetch.length);
         if (resultFetch.length !== 0) {
-            console.log("user alredy existed");
+            // console.log("user alredy existed");
             res.redirect('/auth/signup');
             return;
         }
@@ -93,7 +92,7 @@ exports.postSignup = async (req, res) => {
         let password = req.body.password;
         let confirmPassword = req.body.confirmPassword;
         if (password !== confirmPassword) {
-            console.log("password doesn't match");
+            // console.log("password doesn't match");
             res.redirect('/auth/signup');
             return;
         }
@@ -104,7 +103,7 @@ exports.postSignup = async (req, res) => {
         let result = await query(sqlQuery, [values]);
 
         // console.log(result);
-        console.log("user created successfully");
+        // console.log("user created successfully");
         res.redirect('/auth/login');
 
     } catch (error) {
@@ -117,10 +116,11 @@ exports.postSignup = async (req, res) => {
 }
 
 exports.logout = (req, res) => {
-    // req.session.isLoggedIn = false;
     // res.redirect('/api/login');
+    req.session.isLoggedIn = false;
+    // console.log("successfully logged out");
     req.session.destroy(err => {
-        console.log(err);
+        // console.log(err);
         res.redirect('/auth/login');
     });
 }
