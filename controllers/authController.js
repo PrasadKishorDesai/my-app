@@ -113,7 +113,7 @@ exports.postSignup = async (req, res) => {
         let confirmPassword = req.body.confirmPassword;
 
         const errors = validationResult(req);
-        if (!errors.isEmpty()) {
+        if (!errors.isEmpty() || (password !== confirmPassword)) {
             // 422 for validation failed
             console.log(errors.array()[0]);
             res.status(422).render('signup', {
@@ -135,11 +135,11 @@ exports.postSignup = async (req, res) => {
             return;
         }
 
-        if (password !== confirmPassword) {
-            // console.log("password doesn't match");
-            res.redirect('/auth/signup');
-            return;
-        }
+        // if (password !== confirmPassword) {
+        //     // console.log("password doesn't match");
+        //     res.redirect('/auth/signup');
+        //     return;
+        // }
 
         let hashedPwd = await bcrypt.hash(password, 7);
         let values = { name, email, password: hashedPwd };

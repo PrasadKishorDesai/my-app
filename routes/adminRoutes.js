@@ -19,7 +19,6 @@ router.post('/students', [
         .notEmpty()
         .trim(),
     body('dob')
-        .isLength({ min: 2 })
         .notEmpty()
         .trim(),
     body('bloodgrp')
@@ -47,7 +46,6 @@ router.post('/edit-student/:id', [
         .notEmpty()
         .trim(),
     body('dob')
-        .isLength({ min: 2 })
         .notEmpty()
         .trim(),
     body('bloodgrp')

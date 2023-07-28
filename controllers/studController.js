@@ -33,7 +33,14 @@ const getAddStudent = async (req, res) => {
         res.status(500).render('500', {
             pageTitle: "Internal Server Error!!!",
             data: error.message,
-            // isAuthenticated: req.session.isLoggedIn
+            oldInput: {
+                f_name: '',
+                l_name: '',
+                dob: '',
+                bloodgrp: '',
+                gender: '',
+                phoneno: ''
+            }
         });
     }
 }
@@ -49,7 +56,7 @@ const postAddStudent = async (req, res) => {
             res.status(422).render('add-student', {
                 pageTitle: "Add Student Page",
                 path: "/admin/add-student",
-                // oldInput: {}
+                oldInput: {f_name, l_name, dob, bloodgrp, gender, phoneno}
             });
             return;
         }
@@ -95,12 +102,17 @@ const getEditStudent = async (req, res) => {
         let resultFetch = await query(sqlQueryFetch, [id]);
         // console.log(resultFetch[0])
 
-
-        res.status(200).render('edit-student', {
-            pageTitle: "Add Student Page",
-            path: "auth/edit-student",
-            studData: resultFetch[0],
-        })
+        if (resultFetch.length === 0) {
+            res.status(404).render('404', {
+                pageTitle: "Page Not Found"
+            })
+        } else {
+            res.status(200).render('edit-student', {
+                pageTitle: "Add Student Page",
+                path: "auth/edit-student",
+                studData: resultFetch[0],
+            })
+        }
     } catch (error) {
         res.status(500).render('500', {
             pageTitle: "Internal Server Error!!!",
@@ -114,6 +126,22 @@ const postEditStudent = async (req, res) => {
     try {
         let values = req.body;
         let id = req.params.id;
+
+        const sqlQueryFetch = "SELECT * FROM students WHERE id = ?";
+        let resultFetch = await query(sqlQueryFetch, [id]);
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty() || (resultFetch[0].length === 0)) {
+            // 422 for validation failed
+            console.log(errors.array()[0]);
+            res.status(422).render('edit-student', {
+                pageTitle: "Edit Student Page",
+                path: "/admin/edit-student",
+                studData: resultFetch[0]
+            });
+            return;
+        }
+
         const sqlQuery = "UPDATE students SET ? WHERE id = ?";
         let result = await query(sqlQuery, [values, id]);
 
